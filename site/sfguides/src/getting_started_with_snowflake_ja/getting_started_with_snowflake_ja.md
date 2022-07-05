@@ -7,7 +7,7 @@ feedback link: https://github.com/Snowflake-Labs/sfguides/issues
 tags: Getting Started, Data Science, Data Engineering
 
 
-# Getting Started with Snowflake - Zero to Snowflake
+# Getting Started with Snowflake - Zero to Snowflake(日本語版)
 
 
 <!-- ------------------------ -->
