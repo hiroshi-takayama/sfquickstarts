@@ -41,15 +41,15 @@ This Snowflake Guide is available as a free, instructor-led Virtual Hands on Lab
 
 <!-- ------------------------ -->
 
-## Prepare Your Lab Environment
+## ラボ環境の準備
 
 Duration: 2
 
-If you haven't already, register for a [Snowflake free 30-day trial](https://trial.snowflake.com). The rest of the sections in this lab assume you are using a new Snowfflake account created by registering for a trial.
+まだお済みでない場合は Snowflake 30 ⽇間フリートライアルにご登録ください。
 
-The Snowflake edition (Standard, Enterprise, Business Critical, etc.) and cloud provider (AWS, Azure, GCP), and Region (US East, EU, etc.) you use for this lab do not matter. However, we suggest you select the region that is physically closest to you and Enterprise, our most popular offering, as your Snowflake edition.
+Snowflake エディション（Standard、Premier、Enterprise など）、クラウドプロバイダ（AWS、Azure など）、およびリージョン（⽶国東部、EU など）は、このラボでは依存しません。物理的に最も近いリージョンを選択することをお勧めします。また、Enterprise エディションを選択すると、下位エディションでは利⽤できないマルチクラスタなどの⾼度な機能を活⽤できます。 
 
-After registering, you will receive an email with an activation link and URL for accessing your Snowflake account.
+フリートライアル登録後、Snowflake アカウント URL へのアクティベーションリンクが記載されたメールが届きます。この URL をブックマークしておくと、後で簡単にアクセスできます。アクティベーション後、ユーザ名とパスワードを作成し、書き留めておきます。
 
 
 <!-- ------------------------ -->
