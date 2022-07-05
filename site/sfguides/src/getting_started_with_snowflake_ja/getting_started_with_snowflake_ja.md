@@ -12,11 +12,9 @@ tags: Getting Started, Data Science, Data Engineering
 
 <!-- ------------------------ -->
 
-## Overview
+## ラボの概要
 
 Duration: 2
-
-Welcome to Snowflake! This entry-level guide designed for database and data warehouse administrators and architects will help you navigate the Snowflake interface and introduce you to some of our core capabilities. [Sign up for a free 30-day trial of Snowflake](https://trial.snowflake.com) and follow along with this lab exercise. Once we cover the basics, you'll be ready to start processing your own data and diving into Snowflake's more advanced features like a pro.
 
 このエントリーレベルのラボは、Snowflake のユーザーインターフェイスと基本的な機能をご紹介し、効率的に[30 ⽇間のフリートライアル](https://trial.snowflake.com) をお使い頂けるように設計されております。ラボ作業の完了後、ご利⽤者の独⾃データをSnowflake にロードし、より⾼度な機能を学習する準備ができていることを⽬指します。 
 
@@ -24,11 +22,11 @@ Welcome to Snowflake! This entry-level guide designed for database and data ware
 
 This Snowflake Guide is available as a free, instructor-led Virtual Hands on Lab. [Sign up for the VHOL today](https://www.snowflake.com/virtual-hands-on-lab/).
 
-### Prerequisites:
+### 前提条件
 
-- Use of the [Snowflake free 30-day trial environment](https://trial.snowflake.com)
-- Basic knowledge of SQL, database concepts, and objects
-- Familiarity with CSV comma-delimited files and JSON semi-structured data
+- Snowflake の 30 ⽇間フリートライアル環境
+- SQL の基本的な知識、およびデータベースの概念とデータベースオブジェクトの知識と経験
+- CSV カンマ区切りファイルと JSON 半構造化データの知識と経験
 
 ### What You'll Learn:
 
