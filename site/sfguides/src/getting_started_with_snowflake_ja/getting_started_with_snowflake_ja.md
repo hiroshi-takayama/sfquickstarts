@@ -49,33 +49,34 @@ Snowflake エディション（Standard、Premier、Enterprise など）、ク�
 
 <!-- ------------------------ -->
 
-## The Snowflake ​User Interface & Lab Story
+## Snowflakeのユーザインターフェイスとラボシナリオ
 
 Duration: 8
 
 Negative
-: **About the screenshots, sample code, and environment**
-Screenshots in this lab depict examples and results that may vary slightly from what you see when you complete the exercises.
+: **スクリーンキャプチャ、サンプルコード、および環境**
+についてこのラボのスクリーンキャプチャは、演習を完了したときに表⽰されるものとは若⼲異なる場合があることをご了承ください。 
 
-### Logging into the Snowflake User Interface (UI)
 
-Open a browser window and enter the URL of your Snowflake 30-day trial environment that was sent with your registration email.
+### Snowflakeユーザーインターフェイス（UI）へのログイン
 
-You should see the following login dialog​. Enter the username and password that you specified during the registration:
+ブラウザウィンドウを開き、Snowflake 30 ⽇間フリートライアル環境の URL を⼊⼒します。
+
+以下のログイン画⾯が表⽰されるはずです。資格情報（ユーザ名、パスワード）を⼊⼒してログインします。 
 
 ![login screen](assets/3UIStory_1.png)
 
-### Navigating the Snowflake UI
+### Snowflake UIの紹介
 
-Let's get you acquainted with Snowflake! This section covers the basic components of the user interface. We will move from top to bottom on the left-hand side margin.
+まず、Snowflake を理解するために、ユーザインターフェイスの基本的なコンポーネントについて説明します。UI左部のメニューを上から下の順番で説明します。
 
 ![snowflake navbar](assets/3UIStory_2.png)
 
-#### Worksheets
+#### ワークシート
 
 ![worksheets tab main](assets/3UIStory_3.png)
 
-The ​**Worksheets​** tab provides an interface for submitting SQL queries, performing DDL and DML operations, and viewing results as your queries or operations complete. A new worksheet is created by clicking **+ Worksheet** on the top right.
+**ワークシート** タブはSQL クエリの送信、DDL および DML 操作、クエリや操作の完了時に結果を表示するためのインターフェイスが用意されています。右上の**＋ワークシート**をクリックすると、新しいワークシートが作成されます。
 
 ![worksheets tab details](assets/3UIStory_4.png)
 
