@@ -28,16 +28,15 @@ This Snowflake Guide is available as a free, instructor-led Virtual Hands on Lab
 - SQL の基本的な知識、およびデータベースの概念とデータベースオブジェクトの知識と経験
 - CSV カンマ区切りファイルと JSON 半構造化データの知識と経験
 
-### What You'll Learn:
+### 学習内容:
 
-- How to create stages, databases, tables, views, and virtual warehouses.
-- How to load structured and semi-structured data.
-- How to perform analytical queries on data in Snowflake, including joins between tables.
-- How to clone objects.
-- How to undo user errors using Time Travel.
-- How to create roles and users, and grant them privileges.
-- How to securely and easily share data with other accounts.
-- How to consume datasets in the Snowflake Data Marketplace.
+- ステージ、データベース、テーブル、ビュー、ウェアハウスの作成
+- 構造化および半構造化データのロード
+- テーブル間の結合を含むクエリ
+- オブジェクトのクローン
+- ユーザーエラーの UNDO
+- ロールとユーザを作成し、それらに権限を付与
+- 他のアカウントと安全かつ簡単にデータを共有
 
 <!-- ------------------------ -->
 
