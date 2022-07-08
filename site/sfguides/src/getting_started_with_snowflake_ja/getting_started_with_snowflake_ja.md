@@ -16,11 +16,7 @@ tags: Getting Started, Data Science, Data Engineering
 
 Duration: 2
 
-このエントリーレベルのラボは、Snowflake のユーザーインターフェイスと基本的な機能をご紹介し、効率的に[30 ⽇間のフリートライアル](https://trial.snowflake.com) をお使い頂けるように設計されております。ラボ作業の完了後、ご利⽤者の独⾃データをSnowflake にロードし、より⾼度な機能を学習する準備ができていることを⽬指します。 
-
-### Free Virtual Hands-on Lab
-
-This Snowflake Guide is available as a free, instructor-led Virtual Hands on Lab. [Sign up for the VHOL today](https://www.snowflake.com/virtual-hands-on-lab/).
+このエントリーレベルのラボは、Snowflake のユーザーインターフェイスと基本的な機能をご紹介し、効率的に[30⽇間のフリートライアル](https://trial.snowflake.com) をお使い頂けるように設計されております。ラボ作業の完了後、ご利⽤者の独⾃データをSnowflake にロードし、より⾼度な機能を学習する準備ができていることを⽬指します。 
 
 ### 前提条件
 
@@ -44,11 +40,11 @@ This Snowflake Guide is available as a free, instructor-led Virtual Hands on Lab
 
 Duration: 2
 
-まだお済みでない場合は Snowflake 30 ⽇間フリートライアルにご登録ください。
+まだお済みでない場合は Snowflakeの [30⽇間のフリートライアル](https://trial.snowflake.com) にご登録ください。
 
 Snowflake エディション（Standard、Premier、Enterprise など）、クラウドプロバイダ（AWS、Azure など）、およびリージョン（⽶国東部、EU など）は、このラボでは依存しません。物理的に最も近いリージョンを選択することをお勧めします。また、Enterprise エディションを選択すると、下位エディションでは利⽤できないマルチクラスタなどの⾼度な機能を活⽤できます。 
 
-フリートライアル登録後、Snowflake アカウント URL へのアクティベーションリンクが記載されたメールが届きます。この URL をブックマークしておくと、後で簡単にアクセスできます。アクティベーション後、ユーザ名とパスワードを作成し、書き留めておきます。
+フリートライアル登録後、Snowflake アカウント URL へのアクティベーションリンクが記載されたメールが届きます。このURLをブックマークしておくと、後で簡単にアクセスできます。
 
 
 <!-- ------------------------ -->
