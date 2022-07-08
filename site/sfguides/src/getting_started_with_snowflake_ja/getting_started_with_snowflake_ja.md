@@ -80,9 +80,9 @@ Negative
 
 ![worksheets tab details](assets/3UIStory_4.png)
 
-The top left corner contains the following:
+左のメニューには次のものが含まれます:
 
-- **Home** icon: Use this to get back to the main console/close the worksheet.
+- **ホーム** アイコン : メイン画面に戻る/ワークシートを閉じるときに使用します。
 - **Worksheet_name** drop-down: The default name is the timestamp when the worksheet was created. Click the timestamp to edit the worksheet name. The drop-down also displays additional actions you can perform for the worksheet.
 - **Manage filters** button: Custom filters are special keywords that resolve as a subquery or list of values.
 
