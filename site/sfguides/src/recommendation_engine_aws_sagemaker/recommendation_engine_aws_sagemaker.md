@@ -1,6 +1,6 @@
 summary: Build a Recommendation Engine with AWS SageMaker and Snowflake
-Id: recommendation_engine_aws_sagemaker
-categories: Demos
+id: recommendation_engine_aws_sagemaker
+categories: data-science-&-ml,solution-examples,partner-integrations
 status: Published
 Feedback Link: https://github.com/Snowflake-Labs/sfguides/issues
 tags: SageMaker, AWS, Machine Learning
@@ -47,7 +47,8 @@ Duration: 5
 The first thing you'll need to do is download a small version of the dataset. Once downloaded, unzip the folder.
 
 <button>
-  [Download Dataset](http://files.grouplens.org/datasets/movielens/ml-latest-small.zip)
+
+  [Download Dataset](https://files.grouplens.org/datasets/movielens/ml-latest-small.zip)
 </button>
 
 We're going to take that data and load it into some tables on Snowflake. First, you'll want to sign in to Snowflake. Then run the following block of code to set the context, create a compute warehouse, and create the tables:

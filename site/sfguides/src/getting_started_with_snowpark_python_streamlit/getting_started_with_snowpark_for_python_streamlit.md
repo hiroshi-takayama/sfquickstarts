@@ -1,314 +1,298 @@
 id: getting_started_with_snowpark_for_python_streamlit
-summary: This guide provides the instructions for writing an application using Snowpark for Python and Streamlit.
-categories: Getting Started
+summary: This guide provides the instructions for writing a Streamlit application using Snowpark for Python and data from Snowflake Marketplace.
+categories: getting-started
 environments: web
-status: Published
+status: Hidden
 feedback link: <https://github.com/Snowflake-Labs/sfguides/issues>
-tags: Getting Started, Snowpark, Streamlit
+tags: Getting Started, Snowpark Python, Streamlit
 authors: Dash Desai
 
 # Getting Started With Snowpark for Python and Streamlit
 <!-- ------------------------ -->
 ## Overview
 
-Duration: 1
+Duration: 5
+
+This guide provides the instructions for writing a Streamlit application using Snowpark for Python and data from Snowflake Marketplace.
+
+### What You'll Build
+
+A Streamlit application.
+
+![App](assets/sis.gif)
 
 ### What is Snowpark?
 
-Snowpark at its core provides an API that developers can use to construct DataFrames that are executed lazily on Snowflake’s platform. It enables data engineers, data scientists, and developers coding in languages other than SQL such as Python to take advantage of Snowflake’s powerful platform without having to first move data out of Snowflake. This enables data application developers to run complex transformations within Snowflake while taking advantage of the built-in unlimited scalability, performance, governance and security features. Learn more about [Snowpark](https://www.snowflake.com/snowpark/).
+The set of libraries and runtimes in Snowflake that securely deploy and process non-SQL code, including Python, Java and Scala.
+
+**Familiar Client Side Libraries** - Snowpark brings deeply integrated, DataFrame-style programming and OSS compatible APIs to the languages data practitioners like to use. It also includes the Snowpark ML API for more efficient ML modeling (public preview) and ML operations (private preview).
+
+**Flexible Runtime Constructs** - Snowpark provides flexible runtime constructs that allow users to bring in and run custom logic. Developers can seamlessly build data pipelines, ML models, and data applications with User-Defined Functions and Stored Procedures.
+
+Learn more about [Snowpark](https://www.snowflake.com/snowpark/).
+
+![App](assets/snowpark.png)
 
 ### What is Streamlit?
 
-Streamlit is a pure-Python [open-source](https://github.com/streamlit/streamlit) application framework that enables developers to quickly and easily write data applications. Learn more about [Streamlit](https://streamlit.io/).
+Streamlit enables data scientists and Python developers to combine Streamlit's component-rich, open-source Python library with the scale, performance, and security of the Snowflake platform.
 
-### What You’ll Build
-
-- A web-based data application that uses Snowpark for Python and Streamlit
+Learn more about [Streamlit](https://www.snowflake.com/en/data-cloud/overview/streamlit-in-snowflake/).
 
 ### What You’ll Learn
 
-- How to create a Session object for connecting to Snowflake
-- How to create Snowpark DataFrames and load data from Snowflake
-- How to display tabular data and interactive charts using Streamlit
-- How to run the web-based data application using Streamlit
-- Tips and tricks for enhancing the web-based data application in Streamlit
+- How to access current Session object in Streamlit
+- How to load data from Snowflake Marketplace
+- How to create Snowpark DataFrames and perform transformations
+- How to create and display interactive charts in Streamlit
 
 ### Prerequisites
 
-- Familiarity with Python
-- Python 3.8
-- Snowpark for Python library
-- A [Snowflake](https://www.snowflake.com/) account with ACCOUNTADMIN role
-  - For this guide, we’ll use the **Environment Data Atlas** dataset provided (for free) by **Knoema**. In the [Data Marketplace](https://app.snowflake.com/marketplace/listing/GZSTZ491VXY?search=Knoema), click on Get Data and follow the instructions to gain access to KNOEMA_ENVIRONMENT_DATA_ATLAS.
-  - In particular, we will analyze data in schema **ENVIRONMENT** from tables **EDGARED2019**, **WBWDI2019Jan**, and **UNENVDB2018**.
-- Streamlit Python library
+- A [Snowflake](https://www.snowflake.com/) account in **AWS US Oregon**
+- Access to **Environment Data Atlas** dataset provided (for free) by **Knoema**.
+  - In the [Snowflake Marketplace](https://app.snowflake.com/marketplace/listing/GZSTZ491VXY?search=Knoema), click on **Get Data** and follow the instructions to gain access to ENVIRONMENT_DATA_ATLAS. In particular, we will use data in schema **ENVIRONMENT** from tables **EDGARED2019**, **WBWDI2019Jan**, and **UNENVDB2018**.
 
 <!-- ------------------------ -->
-## Setup Environment
+## Get Started
 
 Duration: 5
 
-1. Install conda to manage a separate environment by running: `pip install conda`. NOTE: The other option is to use [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
+Follow these steps to start creating Streamlit application in Snowsight.
 
-2. Create environment using Snowflake Anaconda channel by running:
+**Step 1.** Click on **Streamlit Apps** on the left navigation menu
 
-    `conda create --name snowpark -c https://repo.anaconda.com/pkgs/snowflake python=3.8`
+**Step 2.** Click on **+ Streamlit App** on the top right
 
-3. Activate conda environment by running: `conda activate snowpark`
+**Step 3.** Enter **App name**
 
-4. Install Snowpark for Python including compatible Pandas version by running:
+**Step 4.** Select **Warehouse** and **App location** (Database and Schema) where you'd like to create the Streamlit applicaton
 
-    `pip install "snowflake-snowpark-python[pandas]"`
+**Step 5.** Click on **Create**
 
-5. Install Streamlit by running: `pip install streamlit`
+- At this point, you will be provided code for an example Streamlit application
 
-NOTE: You many need to use `pip3` instead of `pip`
+**Step 6.** Replace sample application code displayed in the code editor on the left by following instructions in the subsequent steps
 
 <!-- ------------------------ -->
-## Create Python Script
+## Application Setup
 
-Duration: 1
+Duration: 2
 
-Let's start by creating a Python script and adding the import statements to include the required libraries.
-
-*my_snowpark_streamlit_app.py*
+Delete existing sample application code in the code editor on the left and add the following code snippet at the very top.
 
 ```python
-# Import required libraries
-from snowflake.snowpark.session import Session
-from snowflake.snowpark.functions import avg, sum, col,lit
+from snowflake.snowpark.context import get_active_session
+from snowflake.snowpark.functions import sum, col
+import altair as alt
 import streamlit as st
-import pandas as pd
+
+# Set page config
+st.set_page_config(layout="wide")
+
+# Get current session
+session = get_active_session()
 ```
 
+In the above code snippet, we're importing the required libraries, setting the application's page config to use full width of the browser window, and gaining access to the current session.
+
 <!-- ------------------------ -->
-## Connect to Snowflake
+## Load and Transform Data
 
 Duration: 5
 
-In this step, you'll create a [Session object](https://docs.snowflake.com/en/LIMITEDACCESS/snowpark-python.html#creating-a-session)
-to connect to your Snowflake. Here’s a quick way of doing that, but note that hard coding credentials directly in code is not recommended in production environments. In production environments a better approach would be to load credentials from [AWS Secrets Manager](https://github.com/iamontheinet/sf-code-snippets/blob/main/aws_secrets_manager_sf_connection.py) or [Azure Key Vault](https://github.com/iamontheinet/sf-code-snippets/blob/main/azure_key_vault_sf_connection.py), for example.
+Now add the following Python function that loads and caches data from *ENVIRONMENT_DATA_ATLAS.ENVIRONMENT.EDGARED2019* and *ENVIRONMENT_DATA_ATLAS.ENVIRONMENT.WBWDI2019Jan* tables.
 
 ```python
-# Create Session object
-def create_session_object():
-   connection_parameters = {
-      "account": "<account_identifier>",
-      "user": "<username>",
-      "password": "<password>",
-      "role": "<role_name>",
-      "warehouse": "<warehouse_name>",
-      "database": "<database_name>",
-      "schema": "<schema_name>"
-   }
-   session = Session.builder.configs(connection_parameters).create()
-   print(session.sql('select current_warehouse(), current_database(), current_schema()').collect())
-   return session
-```
+@st.cache_data()
+def load_data():
+    # Load CO2 emissions data
+    snow_df_co2 = session.table("ENVIRONMENT_DATA_ATLAS.ENVIRONMENT.EDGARED2019").filter(col('Indicator Name') == 'Fossil CO2 Emissions').filter(col('Type Name') == 'All Type').sort('"Date"').with_column_renamed('"Date"','"Year"')
 
-In the above code snippet, replace variables enclosed in “<>” with your values.
+    # Load and transform forest occupied land area data
+    snow_df_land = session.table("ENVIRONMENT_DATA_ATLAS.ENVIRONMENT.\"WBWDI2019Jan\"").filter(col('Series Name') == 'Forest area (% of land area)')
+    snow_df_land = snow_df_land.group_by('Country Name').agg(sum('$61').alias("Total Share of Forest Land")).sort('Country Name')
+    return snow_df_co2.to_pandas(), snow_df_land.to_pandas()
 
-<!-- ------------------------ -->
-## Load Data in Snowpark DataFrames
-
-Duration: 5
-
-In this step, you'll create three Snowpark DataFrames to load data from tables EDGARED2019, WBWDI2019Jan, and UNENVDB2018 from schema ENVIRONMENT.
-
-```python
-# CO2 Emissions by Country
-snow_df_co2 = session.table("ENVIRONMENT.EDGARED2019").filter(col('Indicator Name') == 'Fossil CO2 Emissions').filter(col('Type Name') == 'All Type')
-snow_df_co2 = snow_df_co2.group_by('Location Name').agg(sum('$16').alias("Total CO2 Emissions")).filter(col('Location Name') != 'World').sort('Location Name')
-
-# Forest Occupied Land Area by Country
-snow_df_land = session.table("ENVIRONMENT.\"WBWDI2019Jan\"").filter(col('Series Name') == 'Forest area (% of land area)')
-snow_df_land = snow_df_land.group_by('Country Name').agg(sum('$61').alias("Total Share of Forest Land")).sort('Country Name')
-
-# Total Municipal Waste by Country
-snow_df_waste = session.table("ENVIRONMENT.UNENVDB2018").filter(col('Variable Name') == 'Municipal waste collected')
-snow_df_waste = snow_df_waste.group_by('Location Name').agg(sum('$12').alias("Total Municipal Waste")).sort('Location Name')
+# Load and cache data
+df_co2_overtime, df_forest_land = load_data()
 ```
 
 In the above code snippet, we’re leveraging several Snowpark DataFrame functions to load and transform data. For example, *filter(), group_by(), agg(), sum(), alias() and sort()*.
 
-**More importantly**, note that at this point nothing is executed on the server because of lazy evaluation–which reduces the amount of data exchanged between Snowflake and the client/application. Also note that when working with Streamlit we need Pandas DataFrames and Snowpark API for Python exposes a method to convert Snowpark DataFrames to Pandas.
+<!-- ------------------------ -->
+## CO2 Emissions by Countries
+
+Duration: 5
+
+Now add the following Python function that displays a country selection dropdown and a chart to visualize CO2 emissions over time for the selected countries.
 
 ```python
-# Convert Snowpark DataFrames to Pandas DataFrames for Streamlit
-pd_df_co2 = snow_df_co2.to_pandas()
-pd_df_land = snow_df_land.to_pandas()
-pd_df_waste = snow_df_waste.to_pandas()
+def co2_emmissions():
+    st.subheader('CO2 Emissions by Countries Over Time')
+
+    countries = ['United States','China','Russia','India','United Kingdom','Germany','Japan','Canada']
+    selected_countries = st.multiselect('',countries, default = ['United States','China','Russia','India','United Kingdom'])
+    st.markdown("___")
+
+    # Display an interactive chart to visualize CO2 emissions over time by the selected countries
+    with st.container():
+        countries_list = countries if len(selected_countries) == 0 else selected_countries
+        df_co2_overtime_filtered = df_co2_overtime[df_co2_overtime['Location Name'].isin(countries_list)]
+        line_chart = alt.Chart(df_co2_overtime_filtered).mark_line(
+            color="lightblue",
+            line=True,
+            point=alt.OverlayMarkDef(color="red")
+        ).encode(
+            x='Year',
+            y='Value',
+            color='Location Name',
+            tooltip=['Location Name','Year','Value']
+        )
+        st.altair_chart(line_chart, use_container_width=True)
 ```
 
-As mentioned above, the Snowpark DataFrames are lazily evaluated, which means the SQL statement is not sent to the server for execution until an action is performed on it. An action, for example *to_pandas()* in our case, causes the DataFrame to be evaluated and sends the corresponding generated SQL statement to the server for execution.
-
-At this point, you’re technically done with most of the code and all you need to do to render the data in a web application in your browser is to use Streamlit’s *dataframe()* API. For example, *st.dataframe(pd_df_co2)*.
-
-But let’s add a few more web components to make our data application a bit more presentable and interactive.
+In the above code snippet, a line chart is constructed which takes a dataframe as one of the parameters. In our case, that is a subset of the *df_co2_overtime* dataframe filtered by the countries selected via Streamlit's *multiselect()* user input component.
 
 <!-- ------------------------ -->
-## Add Web Page Components
+## Forest Occupied Land Area by Countries
 
-Duration: 10
+Duration: 5
 
-In this step, you'll add...
-
-1. A header and sub-header and also use containers and columns to organize our dataframes using Streamlit’s *columns()* and *container()*
-2. Tabular display of the data using Streamlit's *dataframe()*
-3. Interactive bar chart using Streamlit's *slider()* and *bar_chart()*
+Next, add the following Python function that displays a slider input element and a chart to visualize forest occupied land area by countries based on the set threshold.
 
 ```python
-# Add header and a subheader
+def forest_occupied_land():
+    st.subheader('Forest Occupied Land Area by Countries')
+
+    threshold = st.slider(label='Forest Occupied Land By Countries', min_value=1000, max_value=2500, value=1800, step=200, label_visibility='hidden')
+    st.markdown("___")
+
+    # Display an interactive chart to visualize forest occupied land area by countries
+    with st.container():
+        filter = df_forest_land['Total Share of Forest Land'] > threshold
+        pd_df_land_top_n = df_forest_land.where(filter)
+        st.bar_chart(data=pd_df_land_top_n.set_index('Country Name'), width=850, height=400, use_container_width=True)
+```
+
+In the above code snippet, a bar chart is constructed which takes a dataframe as one of the parameters. In our case, that is a subset of the *df_forest_land* dataframe filtered by the threshold set via Streamlit's *slider()* user input component.
+
+<!-- ------------------------ -->
+## Application Components
+
+Duration: 5
+
+Add the following code snippet to display application header, create a sidebar, and map *co2_emmissions()* and *forest_occupied_land()* functions to **CO2 Emissions** and **Forest Occupied Land** options respectively in the sidebar.
+
+```python
+# Display header
 st.header("Knoema: Environment Data Atlas")
-st.subheader("Powered by Snowpark for Python and Snowflake Data Marketplace | Made with Streamlit")
 
-# Use columns to display the three dataframes side-by-side along with their headers
-col1, col2, col3 = st.columns(3)
-with st.container():
-   with col1:
-   st.subheader('CO2 Emissions by Country')
-   st.dataframe(pd_df_co2)
-with col2:
-   st.subheader('Forest Occupied Land Area by Country')
-   st.dataframe(pd_df_land)
-with col3:
-   st.subheader('Total Municipal Waste by Country')
-   st.dataframe(pd_df_waste)
-
-# Display an interactive bar chart to visualize CO2 Emissions by Top N Countries
-with st.container():
-   st.subheader('CO2 Emissions by Top N Countries')
-   with st.expander(""):
-      emissions_threshold = st.number_input(label='Emissions Threshold',min_value=5000, value=20000, step=5000)
-      pd_df_co2_top_n = snow_df_co2.filter(col('Total CO2 Emissions') > emissions_threshold).toPandas()
-      st.bar_chart(data=pd_df_co2_top_n.set_index('Location Name'), width=850, height=500, use_container_width=True)
+# Create sidebar and load the first page
+page_names_to_funcs = {
+    "CO2 Emissions": co2_emmissions,
+    "Forest Occupied Land": forest_occupied_land
+}
+selected_page = st.sidebar.selectbox("Select", page_names_to_funcs.keys())
+page_names_to_funcs[selected_page]()
 ```
 
-In the above code snippet, a bar chart is constructed using Streamlit’s *bar_chart()* which takes a dataframe as one of the parameters. In our case, that is a subset of the **CO2 Emissions by Country** dataframe filtered by column Total CO2 Emissions via Snowpark DataFrame’s *filter()* and user-defined CO2 emissions threshold set via Streamlit’s user input component *slider()*.
-
 <!-- ------------------------ -->
-## Run Web Application
+## Run Application
 
-Duration: 10
+Duration: 5
 
-The fun part! Assuming your Python script (*as shown below*) is free of syntax and connection errors, you’re ready to run the application.
+The fun part! Assuming your code is free of syntax and other errors, you’re ready to run the Streamlit application.
 
-You can run the by executing `streamlit run my_snowpark_streamlit_app.py` at the command line. (Replace *my_snowpark_streamlit_app.py* with the name of your Python scrupt.)
+### Code
+
+Here's what the entire application code should look like.
+
+```python
+# Import libraries
+from snowflake.snowpark.context import get_active_session
+from snowflake.snowpark.functions import sum, col
+import altair as alt
+import streamlit as st
+
+# Set page config
+st.set_page_config(layout="wide")
+
+# Get current session
+session = get_active_session()
+
+@st.cache_data()
+def load_data():
+    # Load CO2 emissions data
+    snow_df_co2 = session.table("ENVIRONMENT_DATA_ATLAS.ENVIRONMENT.EDGARED2019").filter(col('Indicator Name') == 'Fossil CO2 Emissions').filter(col('Type Name') == 'All Type').sort('"Date"').with_column_renamed('"Date"','"Year"')
+
+    # Load forest occupied land area data
+    snow_df_land = session.table("ENVIRONMENT_DATA_ATLAS.ENVIRONMENT.\"WBWDI2019Jan\"").filter(col('Series Name') == 'Forest area (% of land area)')
+    snow_df_land = snow_df_land.group_by('Country Name').agg(sum('$61').alias("Total Share of Forest Land")).sort('Country Name')
+    return snow_df_co2.to_pandas(), snow_df_land.to_pandas()
+
+# Load and cache data
+df_co2_overtime, df_forest_land = load_data()
+
+def co2_emmissions():
+    st.subheader('CO2 Emissions by Countries Over Time')
+
+    countries = ['United States','China','Russia','India','United Kingdom','Germany','Japan','Canada']
+    selected_countries = st.multiselect('',countries, default = ['United States','China','Russia','India','United Kingdom'])
+    st.markdown("___")
+
+    # Display an interactive chart to visualize CO2 emissions over time for the selected countries
+    with st.container():
+        countries_list = countries if len(selected_countries) == 0 else selected_countries
+        df_co2_overtime_filtered = df_co2_overtime[df_co2_overtime['Location Name'].isin(countries_list)]
+        line_chart = alt.Chart(df_co2_overtime_filtered).mark_line(
+            color="lightblue",
+            line=True,
+            point=alt.OverlayMarkDef(color="red")
+        ).encode(
+            x='Year',
+            y='Value',
+            color='Location Name',
+            tooltip=['Location Name','Year','Value']
+        )
+        st.altair_chart(line_chart, use_container_width=True)
+
+def forest_occupied_land():
+    st.subheader('Forest Occupied Land Area by Countries')
+
+    threshold = st.slider(label='Forest Occupied Land By Countries', min_value=1000, max_value=2500, value=1800, step=200, label_visibility='hidden')
+    st.markdown("___")
+
+    # Display an interactive chart to visualize forest occupied land area by countries
+    with st.container():
+        filter = df_forest_land['Total Share of Forest Land'] > threshold
+        pd_df_land_top_n = df_forest_land.where(filter)
+        st.bar_chart(data=pd_df_land_top_n.set_index('Country Name'), width=850, height=400, use_container_width=True) 
+
+# Display header
+st.header("Knoema: Environment Data Atlas")
+
+# Create sidebar and load the first page
+page_names_to_funcs = {
+    "CO2 Emissions": co2_emmissions,
+    "Forest Occupied Land": forest_occupied_land
+}
+selected_page = st.sidebar.selectbox("Select", page_names_to_funcs.keys())
+page_names_to_funcs[selected_page]()
+```
+
+### Run
+
+To run the application, click on **Run** button located at the top right corner.
+
+If all goes well, you should see the application running as shown below.
+
+![App](assets/sis.gif)
 
 In the application:
 
-1. You can click on columns to sort the data
-2. You can increase/decrease the emissions threshold value using the slider to change the data visualization
-
----
-
-![App](assets/img1.png)
-
----
-
-*my_snowpark_streamlit_app.py* -- [Source Code on GitHub](https://github.com/Snowflake-Labs/sfguide-snowpark-for-python-streamlit/blob/main/src/my_snowpark_streamlit_app.py)
-
-```python
-# Snowpark
-from snowflake.snowpark.session import Session
-from snowflake.snowpark.functions import avg, sum, col,lit
-import streamlit as st
-import pandas as pd
-
-st.set_page_config(
-     page_title="Environment Data Atlas",
-     page_icon="🧊",
-     layout="wide",
-     initial_sidebar_state="expanded",
-     menu_items={
-         'Get Help': 'https://developers.snowflake.com',
-         'About': "This is an *extremely* cool app powered by Snowpark for Python, Streamlit, and Snowflake Data Marketplace"
-     }
-)
-
-# Create Session object
-def create_session_object():
-    connection_parameters = {
-      “account”: “<account_identifier>”,
-      “user”: “<username>”,
-      “password”: “<password>”,
-      “role”: “<role_name>”,
-      “warehouse”: “<warehouse_name>”,
-      “database”: “<database_name>”,
-      “schema”: “<schema_name>”
-    }
-    session = Session.builder.configs(connection_parameters).create()
-    print(session.sql('select current_warehouse(), current_database(), current_schema()').collect())
-    return session
-  
-# Create Snowpark DataFrames that loads data from Knoema: Environmental Data Atlas
-def load_data(session):
-    # CO2 Emissions by Country
-    snow_df_co2 = session.table("ENVIRONMENT.EDGARED2019").filter(col('Indicator Name') == 'Fossil CO2 Emissions').filter(col('Type Name') == 'All Type')
-    snow_df_co2 = snow_df_co2.group_by('Location Name').agg(sum('$16').alias("Total CO2 Emissions")).filter(col('Location Name') != 'World').sort('Location Name')
-    
-    # Forest Occupied Land Area by Country
-    snow_df_land = session.table("ENVIRONMENT.\"WBWDI2019Jan\"").filter(col('Series Name') == 'Forest area (% of land area)')
-    snow_df_land = snow_df_land.group_by('Country Name').agg(sum('$61').alias("Total Share of Forest Land")).sort('Country Name')
-    
-    # Total Municipal Waste by Country
-    snow_df_waste = session.table("ENVIRONMENT.UNENVDB2018").filter(col('Variable Name') == 'Municipal waste collected')
-    snow_df_waste = snow_df_waste.group_by('Location Name').agg(sum('$12').alias("Total Municipal Waste")).sort('Location Name')
-    
-    # Convert Snowpark DataFrames to Pandas DataFrames for Streamlit
-    pd_df_co2  = snow_df_co2.to_pandas()
-    pd_df_land = snow_df_land.to_pandas() 
-    pd_df_waste = snow_df_waste.to_pandas()
-    
-    # Add header and a subheader
-    st.header("Knoema: Environment Data Atlas")
-    st.subheader("Powered by Snowpark for Python and Snowflake Data Marketplace | Made with Streamlit")
-    
-    # Use columns to display the three dataframes side-by-side along with their headers
-    col1, col2, col3 = st.columns(3)
-    with st.container():
-        with col1:
-            st.subheader('CO2 Emissions by Country')
-            st.dataframe(pd_df_co2)
-        with col2:
-            st.subheader('Forest Occupied Land Area by Country')
-            st.dataframe(pd_df_land)
-        with col3:
-            st.subheader('Total Municipal Waste by Country')
-            st.dataframe(pd_df_waste)
-    
-    # Display an interactive chart to visualize CO2 Emissions by Top N Countries
-    with st.container():
-        st.subheader('CO2 Emissions by Top N Countries')
-        with st.expander(""):
-            emissions_threshold = st.slider(label='Emissions Threshold',min_value=5000, value=20000, step=5000)
-            pd_df_co2_top_n = snow_df_co2.filter(col('Total CO2 Emissions') > emissions_threshold).to_pandas()
-            st.bar_chart(data=pd_df_co2_top_n.set_index('Location Name'), width=850, height=500, use_container_width=True)
-
-if __name__ == "__main__":
-    session = create_session_object()
-    load_data(session)
-```
-
-<!-- ------------------------ -->
-## Tips And Tricks
-
-Duration: 1
-
-Here are a couple of tips and tricks to note:
-
-- You can change the theme (light or dark) by clicking on the hamburger menu on the top right and then clicking on the **Settings** menu
-- Making any changes to the source script and saving it will automatically prompt you to **Rerun** the application in the browser without having to stop and restart the application at the command line. (This can also be configured to always rerun the app without a prompt.)
-- You can create [multi-page apps in Stremlit](https://docs.streamlit.io/library/get-started/multipage-apps).
-- You can use Streamlit's `st.session_state` to save objects like `snowflake.snowpark.Session` so it's only created once during a session. For example:
-
-```python
-if "snowpark_session" not in st.session_state:
-  session = Session.builder.configs(json.load(open("connection.json"))).create()
-  st.session_state['snowpark_session'] = session
-else:
-  session = st.session_state['snowpark_session']
-```
+1. Select **CO2 Emissions** or **Forest Occupied Land** option from the sidebar
+2. Select or unselect countries to visualize CO2 emissions over time for the selected countries
+3. Increase/decrease the emissions threshold value using the slider to visualize the forest occupied land area by countries based on the set threshold
 
 <!-- ------------------------ -->
 ## Conclusion And Resources
@@ -319,18 +303,13 @@ Congratulations! You've successfully completed the Getting Started with Snowpark
 
 ### What You Learned
 
-- How to create a Session object for connecting to Snowflake
-- How to create Snowpark DataFrames and load data from Snowflake
-- How to display tabular data and interactive charts using Streamlit
-- How to run the web-based data application using Streamlit
-- Tips and tricks for enhancing the web-based data application
+- How to access current Session object in Streamlit
+- How to load data from Snowflake Marketplace
+- How to create Snowpark DataFrames and perform transformations
+- How to create and display interactive charts in Streamlit
 
 ### Related Resources
 
-- [Source Code on GitHub](https://github.com/Snowflake-Labs/sfguide-snowpark-for-python-streamlit/blob/main/src/my_snowpark_streamlit_app.py)
-- [Getting Started with Snowpark for Python](https://quickstarts.snowflake.com/guide/getting_started_with_snowpark_python/index.html?index=..%2F..index#0)
-- [Machine Learning with Snowpark for Python](https://quickstarts.snowflake.com/guide/machine_learning_with_snowpark_python/index.html?index=..%2F..index#0)
-- [Snowpark for Python Examples](https://github.com/Snowflake-Labs/snowpark-python-demos/blob/main/README.md)
-- [Snowpark for Python Developer Guide](https://docs.snowflake.com/en/LIMITEDACCESS/snowpark-python.html)
+- [Snowpark for Python Developer Guide](https://docs.snowflake.com/en/developer-guide/snowpark/python/index.html)
 - [Snowpark for Python API Reference](https://docs.snowflake.com/en/developer-guide/snowpark/reference/python/index.html)
 - [Streamlit Docs](https://docs.streamlit.io/)
